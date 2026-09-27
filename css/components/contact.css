@@ -1,0 +1,118 @@
+/* CONTACT SECTION — buttons, description and footer */
+.contact-section-pro {
+  min-height: 90vh;
+  min-height: 90svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px max(6vw, calc((100vw - 1400px) / 2)) 60px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.contact-inner-pro {
+  max-width: 850px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.contact-title-pro {
+  font-family: var(--font-syne);
+  font-size: clamp(40px, 6.5vw, 84px);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #ffffff;
+  margin-bottom: 28px;
+}
+
+.contact-desc-pro {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.8vw, 20px);
+  color: #94a3b8;
+  line-height: 1.65;
+  max-width: 680px;
+  margin: 0 auto 44px;
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+  transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
+}
+
+.contact-inner-pro.is-revealed .contact-desc-pro {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.22s;
+}
+
+.contact-buttons-pro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.btn-pill-pro {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-syne);
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+
+.btn-pill-pro:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: scale(1.05);
+}
+
+.btn-pill-solid {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.btn-pill-solid:hover {
+  color: #000000;
+  transform: scale(1.05);
+}
+
+#email-plane-icon {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+  transform-origin: center center;
+}
+
+#email-btn-trigger:hover #email-plane-icon {
+  /* Scales and moves the airplane icon relative to the button */
+  transform: scale(1.05) !important;
+}
+
+.footer-pro {
+  padding: 40px 0 32px;
+  text-align: center;
+  font-family: var(--font-syne);
+  font-size: 14px;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 2;
+}

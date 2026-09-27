@@ -1,0 +1,32 @@
+@import 'variables.css';
+@import 'base.css';
+@import 'components/navbar.css';
+@import 'components/hero.css';
+@import 'components/about.css';
+@import 'components/skills.css';
+@import 'components/contact.css';
+@import 'components/modal.css';
+@import 'components/misc.css';
+@import 'components/projects.css';
+
+/* LENIS SMOOTH SCROLL (RECOMMENDED STYLES) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}

@@ -1,0 +1,201 @@
+/* CASE STUDY MODAL DRAWER */
+.modal-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-top: 14px;
+}
+
+.modal-header-container {
+  margin-bottom: 32px;
+}
+
+.modal-tech-section {
+  margin-top: 32px;
+}
+
+.modal-stack-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tech-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 90px;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.tech-badge:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tech-badge i {
+  font-size: 32px;
+  color: inherit;
+}
+
+.tech-badge span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.modal-desc-container {
+  margin-bottom: 32px;
+}
+
+.modal-description {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.project-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.project-modal-wrapper.is-active {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.project-modal-bg {
+  position: absolute;
+  inset: 0;
+  background: #050608;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-modal-wrapper.bg-visible .project-modal-bg {
+  opacity: 1;
+}
+
+/* CONTENT CONTAINER */
+.project-modal-content {
+  position: absolute;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 5% 40px;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.project-modal-wrapper.content-visible .project-modal-content {
+  opacity: 1;
+}
+
+.project-modal-text {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.project-modal-gallery {
+  margin-top: 40px;
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.gallery-scroll-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 20px;
+}
+
+.gallery-image {
+  flex: 0 0 85%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+  scroll-snap-align: center;
+}
+
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 768px) {
+
+  /* 1. Title text is too large */
+  .modal-title {
+    font-size: 26px;
+    margin-top: 10px;
+  }
+
+  /* 2. Description size adjusted for mobile */
+  .modal-description {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* 3. Technology badges sized for mobile */
+  .tech-badge {
+    width: 68px;
+    height: 68px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .tech-badge i {
+    font-size: 24px;
+  }
+
+  .tech-badge span {
+    font-size: 8px;
+  }
+
+  /* 4. Block horizontal overflow and scrollbar */
+  .project-modal-wrapper,
+  .project-modal-content {
+    max-width: 100vw;
+    overflow-x: hidden !important;
+  }
+
+  /* Hide visible scrollbar for gallery (can scroll by touch) */
+  .gallery-scroll-container {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .gallery-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+}

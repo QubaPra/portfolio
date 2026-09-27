@@ -1,0 +1,407 @@
+/* PROJECTS.CSS — Project section and card grid styles
+   Theme: Luxury Technological Minimalism / 3D Kinetic Depth */
+
+/* DEDICATED FULLSCREEN WEBGL OVERLAY CANVAS FOR PROJECT SHADERS
+   Must sit at z-index: 3 so it renders in front of .featured-section cards,
+   while pointer-events: none lets mouse interactions pass right through. */
+#projects-webgl-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 1;
+}
+
+body.modal-is-open #projects-webgl-canvas,
+body.modal-closing #projects-webgl-canvas {
+  z-index: 9997 !important;
+}
+
+/* MAIN PROJECTS SECTION */
+.featured-section {
+  padding: 100px max(7vw, calc((100vw - 1400px) / 2)) 160px;
+  position: relative;
+  z-index: 2;
+  perspective: 1200px;
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 72px;
+  padding-bottom: 24px;
+  position: relative;
+  z-index: 5;
+}
+
+.skills-header {
+  margin-bottom: 52px;
+}
+
+.section-kicker {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: var(--accent-blue-light, #60a5fa);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  display: block;
+  margin-bottom: 12px;
+  min-height: 16px;
+  /* Prevents height jumping on empty text before animation */
+}
+
+/* SECTION TITLES: LETTERS ANIMATING FROM BOTTOM-LEFT UPWARD */
+.section-title {
+  font-family: var(--font-syncopate, 'Syncopate', sans-serif);
+  font-size: clamp(32px, 4.5vw, 62px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.title-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.title-char-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.title-char {
+  display: inline-block;
+  transform: translate3d(-18px, 115%, 0) rotate(8deg);
+  transform-origin: 0% 100%;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: transform 0.35s ease, opacity 0.3s ease;
+}
+
+/* Revealed state: letters rise from bottom-left in a cascading wave */
+.is-revealed .title-char,
+.is-visible .title-char,
+.section-title.is-revealed .title-char,
+.contact-title-pro.is-revealed .title-char {
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  opacity: 1;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--char-i, 0) * 0.034s + 0.06s);
+}
+
+/* SECTION DESCRIPTIONS: SMOOTH MODERN ANIMATION (SLIDE-UP + OPTICAL BLUR REVEAL) */
+.section-disclaimer {
+  max-width: 400px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 14px;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+  transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
+}
+
+.is-revealed .section-disclaimer,
+.section-disclaimer.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.22s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-char {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  .section-disclaimer {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
+/* LUSION PROJECT LIST (2-COLUMN GRID WITH CLEAN MINIMALIST SPACING) */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 52px;
+  row-gap: 76px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 900px) {
+  .project-list {
+    grid-template-columns: 1fr;
+    row-gap: 56px;
+  }
+
+  .featured-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+/* LUSION PROJECT ITEM (CARD CONTAINER) */
+.project-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+  opacity: 0;
+  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.project-item.is-revealed {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   PROJECT ITEM MAIN (IMAGE & WEBGL TRACKING CONTAINER)
+   - background: transparent prevents obscuring the canvas
+   - overflow: visible allows the corners to curve and flare outside the box
+   - border: none; no blue borders, clean dark floating shadow
+   -------------------------------------------------------------------------- */
+.project-item-main {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: visible;
+  background: transparent;
+  border: none;
+}
+
+.project-item:hover .project-item-main {
+  border: none;
+}
+
+/* Fallback DOM image (visible before Three.js loads textures) */
+.project-item-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  filter: brightness(0.9) contrast(1.05);
+  transform: scale(1.04);
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.webgl-active .project-item-image {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* PROJECT ITEM FOOTER (METADATA & TITLE ROW)
+   z-index: 5 ensures text is crisp, clean and sits above canvas */
+.project-item-footer {
+  position: relative;
+  z-index: 5;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+/* Row 1: Metadata / tags */
+.project-item-line-1 {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary, #94a3b8);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 16px;
+  transition: color 0.3s ease;
+}
+
+.project-item:hover .project-item-line-1 {
+  color: var(--accent-blue-light, #60a5fa);
+}
+
+/* --------------------------------------------------------------------------
+   ROW 2: TITLE AND ARROW — EXACT LUSION PHYSICS FROM PREVIOUS VERSION
+   - Letters gravitationally slide to the right (starting from the rightmost norm-ri)
+   - Deceleration with cubic-bezier(0.4, 0.0, 0.15, 1) curve
+   - Arrow slides out after 200ms delay and scales up scale(1.18)
+   - On cursor leave: return from left to right, arrow hides immediately (0ms)
+   - Text color: solid white (#ffffff)
+   -------------------------------------------------------------------------- */
+.project-item-line-2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-height: 40px;
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+/* Arrow container — clips its left edge without any opacity fade */
+.project-item-line-2-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  overflow: hidden;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-item-line-2-icon svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: block;
+  color: #ffffff;
+  /* Hidden to the left outside the visible box */
+  transform: translateX(-110%) scale(1);
+  /* Returns immediately on mouse out (delay: 0ms), quick and snappy */
+  transition: transform 0.16s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition-delay: 0ms;
+}
+
+/* On card hover: arrow slides in from the left and scales up */
+.project-item:hover .project-item-line-2-icon svg {
+  transform: translateX(0) scale(1.18);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 200ms;
+  /* Arrow delay to avoid overlapping the first letter */
+}
+
+/* Text container and letters */
+.project-item-line-2-inner {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(20px, 2vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #ffffff;
+  cursor: pointer;
+
+  /* PARAMETERS FOR TWEAKING LETTER ANIMATION PHYSICS: */
+  --char-duration: 0.28s;
+  /* Duration of a single letter's movement */
+  --char-distance: 36px;
+  /* Distance letters shift to the right */
+  /* Curve with smooth deceleration:
+     - (0.4, 0.0) -> dynamic accelerating start (gravity)
+     - (0.15, 1)  -> soft, smooth braking at the end without abrupt stop */
+  --char-ease-hover: cubic-bezier(0.4, 0.0, 0.15, 1);
+  --char-ease-return: cubic-bezier(0.4, 0.0, 0.15, 1);
+}
+
+/* Resting state of a single letter (unhover):
+   Solid color (#ffffff). Returns left with smooth deceleration. */
+.project-item-line-2-inner .char {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform;
+  transform: translateX(0);
+  color: #ffffff;
+  transition: transform var(--char-duration) var(--char-ease-return);
+  /* Normalized delay: cascade closes in 75ms */
+  transition-delay: calc(30ms + var(--norm-i, 0) * 75ms);
+}
+
+/* On card hover:
+   Solid text color (#ffffff). Letters drift right, last letter first! (norm-ri) */
+.project-item:hover .project-item-line-2-inner .char {
+  transform: translateX(var(--char-distance));
+  color: #ffffff;
+  transition: transform var(--char-duration) var(--char-ease-hover);
+  transition-delay: calc(var(--norm-ri, 0) * 75ms);
+}
+
+/* Fallback for text if JS didn't split into characters */
+.project-item-line-2-inner:not(:has(.char)) {
+  color: #ffffff;
+  transition: transform var(--char-duration) var(--char-ease-return);
+  transition-delay: 30ms;
+}
+
+.project-item:hover .project-item-line-2-inner:not(:has(.char)) {
+  transform: translateX(var(--char-distance));
+  color: #ffffff;
+  transition: transform var(--char-duration) var(--char-ease-hover);
+  transition-delay: 0ms;
+}
+
+@media (max-width: 768px) {
+  .featured-section {
+    padding: 80px 6vw 100px;
+  }
+
+  .section-title {
+    font-size: clamp(36px, 10vw, 48px);
+  }
+
+  .project-item-line-2-inner {
+    font-size: clamp(18px, 5.5vw, 24px);
+  }
+}
+
+
+@media (max-width: 900px) {
+  .project-item-line-1 {
+    font-size: 9px;
+  }
+
+  .project-item-line-2-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .project-item-line-2-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .project-item-line-2-inner {
+    white-space: normal;
+    --char-distance: 16px;
+  }
+
+  .project-item-line-2-inner .char {
+    white-space: pre-wrap;
+  }
+}
